@@ -9,7 +9,7 @@ public class Server extends UnicastRemoteObject
         super();
     }
 
-    protected void getPage( String location )
+    protected void getHTML( String location )
     {
         try // load document and display location
             {
@@ -27,12 +27,5 @@ public class Server extends UnicastRemoteObject
     public static void main ( String args[] ) throws Exception
     {
 
-        // Create an instance of our power service server ...
-        MatrixServiceServer svr = new MatrixServiceServer();
-
-        // ... and bind it with the RMI Registry
-        Naming.bind ("MatrixService", svr);
-
-        System.out.println ("Service bound....");
     }
 }
