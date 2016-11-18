@@ -36,7 +36,7 @@ public class Browser extends JFrame
                 // get document specified by user
                 public void actionPerformed( ActionEvent event )
                 {
-                    getThePage( event.getActionCommand() );
+                    getPage( event.getActionCommand() );
                     history.add (event.getActionCommand());
                 } // end actionPerformed
 
@@ -50,7 +50,7 @@ public class Browser extends JFrame
                 public void hyperlinkUpdate( HyperlinkEvent event )
                 {
                     if ( event.getEventType() == HyperlinkEvent.EventType.ACTIVATED ) {
-                        getThePage( event.getURL().toString() );
+                        getPage( event.getURL().toString() );
                     }
                 } // end hyperlinkUpdate
             }); // end addHyperlinkListener
@@ -68,7 +68,7 @@ public class Browser extends JFrame
     } // end Browser constructor
 
     // load document
-    private void getThePage( String location )
+    protected void getPage( String location )
     {
         try // load document and display location
             {
@@ -81,7 +81,7 @@ public class Browser extends JFrame
                                                "Error retrieving specified URL", "Bad URL",
                                                JOptionPane.ERROR_MESSAGE );
             } // end catch
-    } // end method getThePage
+    } // end method getPage
     public static void main( String[] args )
     {
         Browser application = new Browser();
