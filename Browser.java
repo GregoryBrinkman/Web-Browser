@@ -5,19 +5,19 @@ import java.io.IOException;
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class ReadServerFile extends JFrame
+public class Browser extends JFrame
 {
     private JTextField  enterField; // JTextField to enter site name
     private JEditorPane contentsArea; // to display website
     private JButton     backButton;
     private JButton     forwardButton;
     private JButton     historyButton;
-    private JButton     favoritesButton;
+    private JButton     favoriteButton;
     private JPanel      toolbarPanel;
     public ArrayDeque   history;
 
     // set up GUI
-    public ReadServerFile()
+    public Browser()
     {
         super( "Simple Web Browser" );
 
@@ -25,15 +25,10 @@ public class ReadServerFile extends JFrame
         backButton      = new JButton("Back");
         forwardButton   = new JButton("Forward");
         historyButton   = new JButton("History");
-        favoritesButton = new JButton("Favorites");
+        favoriteButton = new JButton("Favorites");
         enterField      = new JTextField( "Enter file URL here" );
         contentsArea    = new JEditorPane(); // create contentsArea
         history         = new ArrayDeque();
-
-        // create back/forward buttons
-        add(toolbarPanel, BorderLayout.PAGE_START);
-        toolbarPanel.add(backButton, BorderLayout.LINE_START);
-        toolbarPanel.add(forwardButton, BorderLayout.LINE_START);
 
         // create enterField and register its listener
         enterField.addActionListener(new ActionListener()
@@ -47,7 +42,6 @@ public class ReadServerFile extends JFrame
 
             }); // end addActionListener
 
-        toolbarPanel.add( enterField, BorderLayout.CENTER);
 
         contentsArea.setEditable( false );
         contentsArea.addHyperlinkListener(new HyperlinkListener()
@@ -61,10 +55,17 @@ public class ReadServerFile extends JFrame
                 } // end hyperlinkUpdate
             }); // end addHyperlinkListener
 
+        add(toolbarPanel, BorderLayout.PAGE_START);
+        toolbarPanel.add(backButton, BorderLayout.LINE_START);
+        toolbarPanel.add(forwardButton, BorderLayout.LINE_START);
+        toolbarPanel.add( enterField, BorderLayout.CENTER);
+        toolbarPanel.add(historyButton, BorderLayout.LINE_START);
+        toolbarPanel.add(favoriteButton, BorderLayout.LINE_START);
         add( new JScrollPane( contentsArea ), BorderLayout.CENTER );
+
         setSize( 400, 300 ); // set size of window
         setVisible( true ); // show window
-    } // end ReadServerFile constructor
+    } // end Browser constructor
 
     // load document
     private void getThePage( String location )
@@ -81,4 +82,9 @@ public class ReadServerFile extends JFrame
                                                JOptionPane.ERROR_MESSAGE );
             } // end catch
     } // end method getThePage
-} // end class ReadServerFile
+    public static void main( String[] args )
+    {
+        Browser application = new Browser();
+        application.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+    } // end main
+} // end class Browser
