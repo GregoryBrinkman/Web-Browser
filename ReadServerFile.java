@@ -1,91 +1,84 @@
-// Fig. 27.3: ReadServerFile.java
-// Reading a file by opening a connection through a URL.
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.*;
+import java.awt.*;
+import java.awt.event.*;
 import java.io.IOException;
-import javax.swing.JEditorPane;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.event.HyperlinkEvent;
-import javax.swing.event.HyperlinkListener;
+import javax.swing.*;
+import javax.swing.event.*;
 
-public class ReadServerFile extends JFrame 
+public class ReadServerFile extends JFrame
 {
-   private JTextField enterField; // JTextField to enter site name
-   private JEditorPane contentsArea; // to display website
+    private JTextField  enterField; // JTextField to enter site name
+    private JEditorPane contentsArea; // to display website
+    private JButton     backButton;
+    private JButton     forwardButton;
+    private JButton     historyButton;
+    private JButton     favoritesButton;
+    private JPanel      toolbarPanel;
+    public ArrayDeque   history;
 
-   // set up GUI
-   public ReadServerFile()
-   {
-      super( "Simple Web Browser" );
+    // set up GUI
+    public ReadServerFile()
+    {
+        super( "Simple Web Browser" );
 
-      // create enterField and register its listener
-      enterField = new JTextField( "Enter file URL here" );
-      enterField.addActionListener(
-         new ActionListener() 
-         {
-            // get document specified by user
-            public void actionPerformed( ActionEvent event )
+        toolbarPanel    = new JPanel((LayoutManager) new FlowLayout(FlowLayout.LEFT));
+        backButton      = new JButton("Back");
+        forwardButton   = new JButton("Forward");
+        historyButton   = new JButton("History");
+        favoritesButton = new JButton("Favorites");
+        enterField      = new JTextField( "Enter file URL here" );
+        contentsArea    = new JEditorPane(); // create contentsArea
+        history         = new ArrayDeque();
+
+        // create back/forward buttons
+        add(toolbarPanel, BorderLayout.PAGE_START);
+        toolbarPanel.add(backButton, BorderLayout.LINE_START);
+        toolbarPanel.add(forwardButton, BorderLayout.LINE_START);
+
+        // create enterField and register its listener
+        enterField.addActionListener(new ActionListener()
             {
-               getThePage( event.getActionCommand() );
-            } // end method actionPerformed
-         } // end inner class
-      ); // end call to addActionListener
+                // get document specified by user
+                public void actionPerformed( ActionEvent event )
+                {
+                    getThePage( event.getActionCommand() );
+                    history.add (event.getActionCommand());
+                } // end actionPerformed
 
-      add( enterField, BorderLayout.NORTH );
+            }); // end addActionListener
 
-      contentsArea = new JEditorPane(); // create contentsArea
-      contentsArea.setEditable( false );
-      contentsArea.addHyperlinkListener(
-         new HyperlinkListener() 
-         {
-            // if user clicked hyperlink, go to specified page
-            public void hyperlinkUpdate( HyperlinkEvent event )
+        toolbarPanel.add( enterField, BorderLayout.CENTER);
+
+        contentsArea.setEditable( false );
+        contentsArea.addHyperlinkListener(new HyperlinkListener()
             {
-               if ( event.getEventType() == 
-                    HyperlinkEvent.EventType.ACTIVATED )
-                  getThePage( event.getURL().toString() );
-            } // end method hyperlinkUpdate
-         } // end inner class
-      ); // end call to addHyperlinkListener
+                // if user clicked hyperlink, go to specified page
+                public void hyperlinkUpdate( HyperlinkEvent event )
+                {
+                    if ( event.getEventType() == HyperlinkEvent.EventType.ACTIVATED ) {
+                        getThePage( event.getURL().toString() );
+                    }
+                } // end hyperlinkUpdate
+            }); // end addHyperlinkListener
 
-      add( new JScrollPane( contentsArea ), BorderLayout.CENTER );
-      setSize( 400, 300 ); // set size of window
-      setVisible( true ); // show window
-   } // end ReadServerFile constructor
+        add( new JScrollPane( contentsArea ), BorderLayout.CENTER );
+        setSize( 400, 300 ); // set size of window
+        setVisible( true ); // show window
+    } // end ReadServerFile constructor
 
-   // load document
-   private void getThePage( String location )
-   {
-      try // load document and display location 
-      {
-         contentsArea.setPage( location ); // set the page
-         enterField.setText( location ); // set the text
-      } // end try
-      catch ( IOException ioException ) 
-      {
-         JOptionPane.showMessageDialog( this,
-            "Error retrieving specified URL", "Bad URL", 
-            JOptionPane.ERROR_MESSAGE );
-      } // end catch
-   } // end method getThePage
+    // load document
+    private void getThePage( String location )
+    {
+        try // load document and display location
+            {
+                contentsArea.setPage( location ); // set the page
+                enterField.setText( location ); // set the text
+            } // end try
+        catch ( IOException ioException )
+            {
+                JOptionPane.showMessageDialog( this,
+                                               "Error retrieving specified URL", "Bad URL",
+                                               JOptionPane.ERROR_MESSAGE );
+            } // end catch
+    } // end method getThePage
 } // end class ReadServerFile
-
-
-/**************************************************************************
- * (C) Copyright 1992-2010 by Deitel & Associates, Inc. and               *
- * Pearson Education, Inc. All Rights Reserved.                           *
- *                                                                        *
- * DISCLAIMER: The authors and publisher of this book have used their     *
- * best efforts in preparing the book. These efforts include the          *
- * development, research, and testing of the theories and programs        *
- * to determine their effectiveness. The authors and publisher make       *
- * no warranty of any kind, expressed or implied, with regard to these    *
- * programs or to the documentation contained in these books. The authors *
- * and publisher shall not be liable in any event for incidental or       *
- * consequential damages in connection with, or arising out of, the       *
- * furnishing, performance, or use of these programs.                     *
- *************************************************************************/
