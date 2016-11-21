@@ -11,16 +11,17 @@ import javax.swing.event.*;
 public class Browser extends JFrame
 {
     private JTextField  enterField; // JTextField to enter site name
-    static private JEditorPane contentsArea; // to display website
+    private JEditorPane contentsArea; // to display website
     private JButton     backButton;
     private JButton     forwardButton;
     private JButton     historyButton;
     private JButton     favoriteButton;
     private JPanel      toolbarPanel;
-    static private JScrollPane contentPane;
+    private JScrollPane contentPane;
     public ArrayDeque   history;
     public static ServerInterface service;
     public URL url;
+    String htmlText;
 
     // set up GUI
     public Browser()
@@ -32,7 +33,7 @@ public class Browser extends JFrame
         forwardButton   = new JButton("Forward");
         historyButton   = new JButton("History");
         favoriteButton = new JButton("Favorites");
-        enterField      = new JTextField( "http://www.google.com" );
+        enterField      = new JTextField( "http://motherfuckingwebsite.com" );
         contentsArea    = new JEditorPane(); // create contentsArea
         contentsArea.setContentType("text/html");
         history         = new ArrayDeque();
@@ -80,9 +81,9 @@ public class Browser extends JFrame
         try // load document and display location
             {
                 url = new URL(location);
-                String htmlText = service.getHTML(url);
+                htmlText = service.getHTML(url);
                 System.out.println(htmlText);
-                contentsArea.setPage(htmlText); // set the page
+                contentsArea.setText(htmlText); // set the page
                 enterField.setText( location ); // set the text
             } // end try
         catch ( IOException ioException )
