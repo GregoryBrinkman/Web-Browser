@@ -1,3 +1,6 @@
+import java.rmi.*;
+import javax.swing.text.html.HTMLDocument;
+import java.net.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -8,13 +11,16 @@ import javax.swing.event.*;
 public class Browser extends JFrame
 {
     private JTextField  enterField; // JTextField to enter site name
-    private JEditorPane contentsArea; // to display website
+    static private JEditorPane contentsArea; // to display website
     private JButton     backButton;
     private JButton     forwardButton;
     private JButton     historyButton;
     private JButton     favoriteButton;
     private JPanel      toolbarPanel;
+    static private JScrollPane contentPane;
     public ArrayDeque   history;
+    public static ServerInterface service;
+    public URL url;
 
     // set up GUI
     public Browser()
@@ -26,8 +32,9 @@ public class Browser extends JFrame
         forwardButton   = new JButton("Forward");
         historyButton   = new JButton("History");
         favoriteButton = new JButton("Favorites");
-        enterField      = new JTextField( "Enter file URL here" );
+        enterField      = new JTextField( "http://www.google.com" );
         contentsArea    = new JEditorPane(); // create contentsArea
+        contentsArea.setContentType("text/html");
         history         = new ArrayDeque();
 
         // create enterField and register its listener
@@ -55,14 +62,14 @@ public class Browser extends JFrame
                 } // end hyperlinkUpdate
             }); // end addHyperlinkListener
 
+        contentPane = new JScrollPane(contentsArea);
         add(toolbarPanel, BorderLayout.PAGE_START);
         toolbarPanel.add(backButton, BorderLayout.LINE_START);
         toolbarPanel.add(forwardButton, BorderLayout.LINE_START);
         toolbarPanel.add( enterField, BorderLayout.CENTER);
         toolbarPanel.add(historyButton, BorderLayout.LINE_START);
         toolbarPanel.add(favoriteButton, BorderLayout.LINE_START);
-        add( new JScrollPane( contentsArea ), BorderLayout.CENTER );
-
+        add( contentPane, BorderLayout.CENTER );
         setSize( 400, 300 ); // set size of window
         setVisible( true ); // show window
     } // end Browser constructor
@@ -72,7 +79,10 @@ public class Browser extends JFrame
     {
         try // load document and display location
             {
-                contentsArea.setPage( location ); // set the page
+                url = new URL(location);
+                String htmlText = service.getHTML(url);
+                System.out.println(htmlText);
+                contentsArea.setPage(htmlText); // set the page
                 enterField.setText( location ); // set the text
             } // end try
         catch ( IOException ioException )
@@ -84,6 +94,17 @@ public class Browser extends JFrame
     } // end method getPage
     public static void main( String[] args )
     {
+        try{
+            // service = (Server) Naming.lookup
+            //     ("rmi://" + args[0] + "/Server");
+            service = (ServerInterface) Naming.lookup ("rmi://localhost/Server");
+        }
+        catch(Exception e){
+            System.out.println("Failed setting up registry lookup");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
         Browser application = new Browser();
         application.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     } // end main
