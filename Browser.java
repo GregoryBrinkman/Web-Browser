@@ -11,12 +11,13 @@ import javax.swing.event.*;
 public class Browser extends JFrame
 {
     private JTextField  enterField; // JTextField to enter site name
-    private JEditorPane contentsArea; // to display website
+    static private JEditorPane contentsArea; // to display website
     private JButton     backButton;
     private JButton     forwardButton;
     private JButton     historyButton;
     private JButton     favoriteButton;
     private JPanel      toolbarPanel;
+    static private JScrollPane contentPane;
     public ArrayDeque   history;
     public static ServerInterface service;
     public URL url;
@@ -61,13 +62,14 @@ public class Browser extends JFrame
                 } // end hyperlinkUpdate
             }); // end addHyperlinkListener
 
+        contentPane = new JScrollPane(contentsArea);
         add(toolbarPanel, BorderLayout.PAGE_START);
         toolbarPanel.add(backButton, BorderLayout.LINE_START);
         toolbarPanel.add(forwardButton, BorderLayout.LINE_START);
         toolbarPanel.add( enterField, BorderLayout.CENTER);
         toolbarPanel.add(historyButton, BorderLayout.LINE_START);
         toolbarPanel.add(favoriteButton, BorderLayout.LINE_START);
-        add( new JScrollPane( contentsArea ), BorderLayout.CENTER );
+        add( contentPane, BorderLayout.CENTER );
         setSize( 400, 300 ); // set size of window
         setVisible( true ); // show window
     } // end Browser constructor
@@ -80,7 +82,7 @@ public class Browser extends JFrame
                 url = new URL(location);
                 String htmlText = service.getHTML(url);
                 System.out.println(htmlText);
-                contentsArea.setText(htmlText); // set the page
+                contentsArea.setPage(htmlText); // set the page
                 enterField.setText( location ); // set the text
             } // end try
         catch ( IOException ioException )
