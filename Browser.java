@@ -1,3 +1,6 @@
+import java.rmi.*;
+import javax.swing.text.html.HTMLDocument;
+import java.net.*;
 import java.util.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,6 +18,8 @@ public class Browser extends JFrame
     private JButton     favoriteButton;
     private JPanel      toolbarPanel;
     public ArrayDeque   history;
+    public static ServerInterface service;
+    public URL url;
 
     // set up GUI
     public Browser()
@@ -26,8 +31,9 @@ public class Browser extends JFrame
         forwardButton   = new JButton("Forward");
         historyButton   = new JButton("History");
         favoriteButton = new JButton("Favorites");
-        enterField      = new JTextField( "Enter file URL here" );
+        enterField      = new JTextField( "http://www.google.com" );
         contentsArea    = new JEditorPane(); // create contentsArea
+        contentsArea.setContentType("text/html");
         history         = new ArrayDeque();
 
         // create enterField and register its listener
@@ -62,7 +68,6 @@ public class Browser extends JFrame
         toolbarPanel.add(historyButton, BorderLayout.LINE_START);
         toolbarPanel.add(favoriteButton, BorderLayout.LINE_START);
         add( new JScrollPane( contentsArea ), BorderLayout.CENTER );
-
         setSize( 400, 300 ); // set size of window
         setVisible( true ); // show window
     } // end Browser constructor
@@ -72,7 +77,10 @@ public class Browser extends JFrame
     {
         try // load document and display location
             {
-                contentsArea.setPage( location ); // set the page
+                url = new URL(location);
+                String htmlText = service.getHTML(url);
+                System.out.println(htmlText);
+                contentsArea.setText(htmlText); // set the page
                 enterField.setText( location ); // set the text
             } // end try
         catch ( IOException ioException )
@@ -84,6 +92,17 @@ public class Browser extends JFrame
     } // end method getPage
     public static void main( String[] args )
     {
+        try{
+            // service = (Server) Naming.lookup
+            //     ("rmi://" + args[0] + "/Server");
+            service = (ServerInterface) Naming.lookup ("rmi://localhost/Server");
+        }
+        catch(Exception e){
+            System.out.println("Failed setting up registry lookup");
+            e.printStackTrace();
+            System.exit(1);
+        }
+
         Browser application = new Browser();
         application.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     } // end main

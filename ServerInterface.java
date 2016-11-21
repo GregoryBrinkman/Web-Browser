@@ -1,6 +1,10 @@
 import java.rmi.*;
+import java.net.*;
+import java.io.*;
+import java.rmi.server.*;
 
 public interface ServerInterface extends java.rmi.Remote
 {
-  protected void getHTML( String location ) throws RemotedException;
+
+    String getHTML( URL location ) throws RemoteException;
 }
