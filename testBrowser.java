@@ -19,28 +19,29 @@ import javafx.stage.Stage;
 public class testBrowser extends Application
 {
     private WebEngine engine;
-    private WebView browser; //displays websites
+    private WebView   browser; //displays websites
     private TextField urlField; //where urls are entered
-    URL url;
-    String htmlText;
-    private Button forwardButton;
-    private Button backButton;
+    public  URL       url;
+    public  String    htmlText;
+    private Button    forwardButton;
+    private Button    backButton;
+    private Button    favoritesButton;
+    private Button    historyButton;
     public static ServerInterface service;
 
     public void start(Stage stage) {
         stage.setTitle("Browser"); //window name
-
-        browser = new WebView();
-        engine = browser.getEngine();
-        urlField = new TextField();
-        backButton = new Button("back");
-        forwardButton = new Button("forward");
+        browser         = new WebView();
+        engine          = browser.getEngine();
+        urlField        = new TextField();
+        backButton      = new Button("Back");
+        forwardButton   = new Button("Forward");
+        favoritesButton = new Button("Favorites");
+        historyButton   = new Button("History");
 
         //define url input handling
         urlField.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    //engine does what we want. maybe kill the rmi stuff?
-                    // engine.load(urlField.getText());
                     getPage(urlField.getText());
                 }
             });
@@ -50,28 +51,23 @@ public class testBrowser extends Application
             .addListener(new ChangeListener<Throwable>() {
                     @Override
                     public void changed(ObservableValue<? extends Throwable> observableValue,
-                                        Throwable oldException, Throwable exception) {
+                                        Throwable oldException,
+                                        Throwable exception) {
                         System.out.println("Exception loading a page: " + exception);
                     }
                 });
 
-
-
-
-        //display setup
-
         //set Toolbar
         HBox toolbar = new HBox();
-        toolbar.getChildren().setAll(
-                                     urlField
-                                     );
+        toolbar.getChildren().setAll(backButton,
+                                     forwardButton,
+                                     urlField,
+                                     favoritesButton,
+                                     historyButton);
 
         //set Window
         VBox root = new VBox();
-        root.getChildren().setAll(
-                                  toolbar,
-                                  browser
-                                  );
+        root.getChildren().setAll(toolbar, browser);
         stage.setScene(new Scene(root));
         stage.show();
     }
@@ -81,25 +77,28 @@ public class testBrowser extends Application
     {
         try // load document and display location
             {
-                System.out.printf("%s\n", location);
-                url = new URL(location);
-                System.out.printf("%s\n", url);
-
-                System.out.println("hello");
+                url      = new URL(location);
                 htmlText = service.getHTML(url);
-                System.out.println("goodbye");
-                System.out.println(htmlText);
                 engine.loadContent(htmlText);
-                // contentsArea.setText(htmlText); // set the page
-                // enterField.setText( location ); // set the text
             } // end try
         catch ( IOException ioException )
             {
-                // JOptionPane.showMessageDialog( this,
-                //                                "Error retrieving specified URL", "Bad URL",
-                //                                JOptionPane.ERROR_MESSAGE );
+                // engine.load("file:///error.html");
             } // end catch
     } // end method getPage
 
-    public static void main(String[] args) { launch(args); }
+    public static void main(String[] args) {
+
+        try{
+            // service = (Server) Naming.lookup
+            //     ("rmi://" + args[0] + "/Server");
+            service = (ServerInterface) Naming.lookup ("rmi://localhost/Server");
+        }
+        catch(Exception e){
+            System.out.println("Failed setting up registry lookup");
+            e.printStackTrace();
+            System.exit(1);
+        }
+        launch(args);
+    }
 }
