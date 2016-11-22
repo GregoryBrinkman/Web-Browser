@@ -52,6 +52,7 @@ public class Server extends UnicastRemoteObject
                 connection.connect();
                 html = connection.getInputStream();
                 htmlString = getStringFromInputStream(html);
+                System.out.printf("\n%s\n", html);
                 return htmlString;
             } // end try
         catch ( IOException ioException )
