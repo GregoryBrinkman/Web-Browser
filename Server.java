@@ -18,9 +18,9 @@ public class Server extends UnicastRemoteObject
     private static String getStringFromInputStream(InputStream is) {
 
         BufferedReader br = null;
-        StringBuilder sb = new StringBuilder();
+        StringBuilder  sb = new StringBuilder();
+        String         line;
 
-        String line;
         try {
 
             br = new BufferedReader(new InputStreamReader(is));
@@ -53,21 +53,27 @@ public class Server extends UnicastRemoteObject
                 htmlString = getStringFromInputStream(html);
                 return htmlString;
             } // end try
-        catch ( IOException ioException )
+        catch ( Exception e)
             {
-                return htmlString;
-            } // end catch
+                return "Page request error";
+            }
     } // end method getPage
 
     public static void main ( String args[] ) throws Exception
     {
 
-        // Create an instance of our power service server ...
-        Server svr = new Server();
+        try {
+            // Create an instance of our power service server ...
+            Server svr = new Server();
 
-        // ... and bind it with the RMI Registry
-        Naming.bind ("Server", svr);
+            // ... and bind it with the RMI Registry
+            Naming.bind ("Server", svr);
+            System.out.println ("Service bound....");
 
-        System.out.println ("Service bound....");
+        } catch (Exception e) {
+            System.out.println("Failed to register object " + e);
+            e.printStackTrace();
+            System.exit(1);
+        }
     }
 }
