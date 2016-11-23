@@ -1,6 +1,7 @@
 import java.rmi.*;
 import java.net.*;
 import java.util.*;
+import java.io.*;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.beans.value.*;
@@ -101,31 +102,24 @@ public class Browser extends Application
                                         if (href == null) { return; }
                                         else {
                                             try {
-                                                service.getHTML(new URL(href));
+                                                getPage(href);
                                             }
                                             catch (Exception e) {
                                                 System.out.println("Hyperlink error: " + e);
                                             }
-                                        }
-                                    }
- 
-
-                                }
-                            };
- 
+                                        } // end else
+                                    } // end if
+                                } // end handleEvent()
+                            }; // end EventListener listener
 
                         Document doc = engine.getDocument();
                         NodeList nodeList = doc.getElementsByTagName("a");
                         for (int i = 0; i < nodeList.getLength(); i++) {
                             ((EventTarget) nodeList.item(i)).addEventListener(EVENT_TYPE_CLICK, listener, false);
                         }
-                    }
-                }
-
-
-
-
-            });
+                    } // end if
+                } // end changed()
+            }); // end addListener()
 
         //set Toolbar
         HBox toolbar = new HBox();
@@ -140,22 +134,54 @@ public class Browser extends Application
         root.getChildren().setAll(toolbar, browser);
         stage.setScene(new Scene(root));
         stage.show();
-    }
+    } // end start()
 
     // load document
     protected void getPage( String location )
     {
         try // load document and display location
             {
-                url      = new URL(location);
+                if (location.charAt(0) == '/' && lastLocation != null) {
+                    // catch relative links
+                    location = lastLocation + location;
+                }
+                url = new URL(location);
+                lastLocation = location; // store the last url for relative links
+
+                System.out.println("getting url...");
                 htmlText = service.getHTML(url);
-                engine.loadContent(htmlText);
+                System.out.println("got url...");
+
+                if (htmlText.equals("Page request error")) {
+                    System.err.println("Error: Can't get page");
+                    engine.loadContent(errorPage);
+                }
+                else {
+                    System.out.println("loading content...");
+                    engine.loadContent(htmlText);
+                    System.out.println("content loaded...");
+                }
+
+                System.out.println();
+                urlField.setText(location);
+
+                // addToHistory(location);
 
             } // end try
-        catch ( IOException ioException )
+
+        catch ( MalformedURLException URLException )
             {
-                // engine.load("file:///error.html");
+                System.err.println("Error: Malformed URL");
+                URLException.printStackTrace();
+                engine.loadContent(errorPage);
+            }
+        catch ( Exception e)
+            {
+                System.err.println("Error: Can't get page");
+                e.printStackTrace();
+                engine.loadContent(errorPage);
             } // end catch
+
     } // end method getPage
 
     public static void main(String[] args) {
