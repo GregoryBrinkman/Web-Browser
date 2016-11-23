@@ -1,100 +1,141 @@
 import java.rmi.*;
-import javax.swing.text.html.HTMLDocument;
 import java.net.*;
 import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
 import java.io.IOException;
-import javax.swing.*;
-import javax.swing.event.*;
+import javafx.application.Application;
+import javafx.beans.value.*;
+import javafx.event.*;
+import javafx.scene.Scene;
+import javafx.scene.control.TextField;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.web.*;
+import javafx.stage.Stage;
+import javafx.concurrent.Worker.State;
+import javafx.concurrent.Worker;
+import org.w3c.dom.*;
+import org.w3c.dom.events.DocumentEvent;
+import org.w3c.dom.events.Event;
+import org.w3c.dom.events.EventListener;
+import org.w3c.dom.events.EventTarget;
 
-public class Browser extends JFrame
+public class Browser extends Application
 {
-    private JTextField  enterField; // JTextField to enter site name
-    private JEditorPane contentsArea; // to display website
-    private JButton     backButton;
-    private JButton     forwardButton;
-    private JButton     historyButton;
-    private JButton     favoriteButton;
-    private JPanel      toolbarPanel;
-    private JScrollPane contentPane;
-    public ArrayDeque   history;
+    public static final String EVENT_TYPE_CLICK = "click";
     public static ServerInterface service;
-    public URL url;
-    String htmlText;
 
-    // set up GUI
-    public Browser()
-    {
-        super( "Simple Web Browser" );
+    private WebEngine engine;
+    private WebView   browser;
+    private TextField urlField;
+    public  URL       url;
+    public  String    htmlText;
+    private Button    forwardButton;
+    private Button    backButton;
+    private Button    favoritesButton;
+    private Button    historyButton;
 
-        toolbarPanel    = new JPanel((LayoutManager) new FlowLayout(FlowLayout.LEFT));
-        backButton      = new JButton("Back");
-        forwardButton   = new JButton("Forward");
-        historyButton   = new JButton("History");
-        favoriteButton = new JButton("Favorites");
-        enterField      = new JTextField( "http://motherfuckingwebsite.com" );
-        contentsArea    = new JEditorPane(); // create contentsArea
-        contentsArea.setContentType("text/html");
-        history         = new ArrayDeque();
+    public void start(Stage stage) {
+        stage.setTitle("Browser"); //window name
+        browser         = new WebView();
+        engine          = browser.getEngine();
+        urlField        = new TextField("http://www.google.com");
+        backButton      = new Button("Back");
+        forwardButton   = new Button("Forward");
+        favoritesButton = new Button("Favorites");
+        historyButton   = new Button("History");
 
-        // create enterField and register its listener
-        enterField.addActionListener(new ActionListener()
-            {
-                // get document specified by user
-                public void actionPerformed( ActionEvent event )
-                {
-                    getPage( event.getActionCommand() );
-                    history.add (event.getActionCommand());
-                } // end actionPerformed
+        //define url input handling
+        urlField.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                    getPage(urlField.getText());
+                }
+            });
 
-            }); // end addActionListener
-
-
-        contentsArea.setEditable( false );
-        contentsArea.addHyperlinkListener(new HyperlinkListener()
-            {
-                // if user clicked hyperlink, go to specified page
-                public void hyperlinkUpdate( HyperlinkEvent event )
-                {
-                    if ( event.getEventType() == HyperlinkEvent.EventType.ACTIVATED ) {
-                        getPage( event.getURL().toString() );
+        engine.getLoadWorker()
+            .exceptionProperty()
+            .addListener(new ChangeListener<Throwable>() {
+                    public void changed(ObservableValue<? extends Throwable> observableValue,
+                                        Throwable oldException,
+                                        Throwable exception) {
+                        System.out.println("Exception loading a page: " + exception);
                     }
-                } // end hyperlinkUpdate
-            }); // end addHyperlinkListener
+                });
 
-        contentPane = new JScrollPane(contentsArea);
-        add(toolbarPanel, BorderLayout.PAGE_START);
-        toolbarPanel.add(backButton, BorderLayout.LINE_START);
-        toolbarPanel.add(forwardButton, BorderLayout.LINE_START);
-        toolbarPanel.add( enterField, BorderLayout.CENTER);
-        toolbarPanel.add(historyButton, BorderLayout.LINE_START);
-        toolbarPanel.add(favoriteButton, BorderLayout.LINE_START);
-        add( contentPane, BorderLayout.CENTER );
-        setSize( 400, 300 ); // set size of window
-        setVisible( true ); // show window
-    } // end Browser constructor
+
+
+        engine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
+                public void changed(ObservableValue ov, State oldState, State newState) {
+                    if (newState == Worker.State.SUCCEEDED) {
+                        EventListener listener = new EventListener() {
+                                public void handleEvent(Event ev) {
+                                    String domEventType = ev.getType();
+                                    //System.err.println("EventType: " + domEventType);
+
+                                    if (domEventType.equals(EVENT_TYPE_CLICK)) {
+                                        String href = ((Element)ev.getTarget()).getAttribute("href");
+                                        if (href == null) { return; }
+                                        else {
+                                            try {
+                                                service.getHTML(new URL(href));
+                                            }
+                                            catch (Exception e) {
+                                                System.out.println("Hyperlink error: " + e);
+                                            }
+                                        }
+                                    }
+ 
+
+                                }
+                            };
+ 
+
+                        Document doc = engine.getDocument();
+                        NodeList nodeList = doc.getElementsByTagName("a");
+                        for (int i = 0; i < nodeList.getLength(); i++) {
+                            ((EventTarget) nodeList.item(i)).addEventListener(EVENT_TYPE_CLICK, listener, false);
+                        }
+                    }
+                }
+
+
+
+
+            });
+
+        //set Toolbar
+        HBox toolbar = new HBox();
+        toolbar.getChildren().setAll(backButton,
+                                     forwardButton,
+                                     urlField,
+                                     favoritesButton,
+                                     historyButton);
+
+        //set Window
+        VBox root = new VBox();
+        root.getChildren().setAll(toolbar, browser);
+        stage.setScene(new Scene(root));
+        stage.show();
+    }
 
     // load document
     protected void getPage( String location )
     {
         try // load document and display location
             {
-                url = new URL(location);
+                url      = new URL(location);
                 htmlText = service.getHTML(url);
-                System.out.println(htmlText);
-                contentsArea.setText(htmlText); // set the page
-                enterField.setText( location ); // set the text
+                engine.loadContent(htmlText);
+
             } // end try
         catch ( IOException ioException )
             {
-                JOptionPane.showMessageDialog( this,
-                                               "Error retrieving specified URL", "Bad URL",
-                                               JOptionPane.ERROR_MESSAGE );
+                // engine.load("file:///error.html");
             } // end catch
     } // end method getPage
-    public static void main( String[] args )
-    {
+
+    public static void main(String[] args) {
+
         try{
             // service = (Server) Naming.lookup
             //     ("rmi://" + args[0] + "/Server");
@@ -105,8 +146,6 @@ public class Browser extends JFrame
             e.printStackTrace();
             System.exit(1);
         }
-
-        Browser application = new Browser();
-        application.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-    } // end main
-} // end class Browser
+        launch(args);
+    }
+}
