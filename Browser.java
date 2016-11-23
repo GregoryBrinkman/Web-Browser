@@ -22,18 +22,22 @@ import org.w3c.dom.events.EventTarget;
 
 public class Browser extends Application
 {
-    public static final String EVENT_TYPE_CLICK = "click";
-    public static ServerInterface service;
+    public  static final String    EVENT_TYPE_CLICK = "click";
+    public  static ServerInterface service;
+    private static String          lastLocation;
 
     private WebEngine engine;
     private WebView   browser;
     private TextField urlField;
     public  URL       url;
     public  String    htmlText;
+    private String    errorPage;
     private Button    forwardButton;
     private Button    backButton;
     private Button    favoritesButton;
     private Button    historyButton;
+    private StringBuffer fileData;
+    private BufferedReader reader;
 
     public void start(Stage stage) {
         stage.setTitle("Browser"); //window name
@@ -44,6 +48,26 @@ public class Browser extends Application
         forwardButton   = new Button("Forward");
         favoritesButton = new Button("Favorites");
         historyButton   = new Button("History");
+        errorPage       = "";
+        fileData        = new StringBuffer();
+
+        // load error page html into string
+        try
+            {
+                reader      = new BufferedReader(new FileReader("error.html"));
+                char[] buf  = new char[1024];
+                int numRead = 0;
+                while((numRead=reader.read(buf)) != -1){
+                    errorPage = String.valueOf(buf, 0, numRead);
+                    fileData.append(errorPage);
+                }
+                reader.close();
+                errorPage = fileData.toString();
+            }
+        catch (Exception e)
+            {
+                e.printStackTrace();
+            }
 
         //define url input handling
         urlField.setOnAction(new EventHandler<ActionEvent>() {
