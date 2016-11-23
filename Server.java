@@ -6,9 +6,9 @@ import java.rmi.server.*;
 public class Server extends UnicastRemoteObject
     implements ServerInterface
 {
-    InputStream html;
+    InputStream       html;
     HttpURLConnection connection;
-    String htmlString;
+    String            htmlString;
 
     public Server() throws RemoteException
     {
@@ -39,10 +39,9 @@ public class Server extends UnicastRemoteObject
                 }
             }
         }
-
         return sb.toString();
+    }
 
-	}
     public String getHTML( URL location ) throws RemoteException
     {
         try // load document and display location
@@ -50,9 +49,8 @@ public class Server extends UnicastRemoteObject
                 connection = (HttpURLConnection)location.openConnection();
                 connection.setRequestMethod("GET");
                 connection.connect();
-                html = connection.getInputStream();
+                html       = connection.getInputStream();
                 htmlString = getStringFromInputStream(html);
-                System.out.printf("\n%s\n", html);
                 return htmlString;
             } // end try
         catch ( IOException ioException )
