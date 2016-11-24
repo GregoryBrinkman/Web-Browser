@@ -44,7 +44,7 @@ public class Browser extends Application
         stage.setTitle("Browser"); //window name
         browser         = new WebView();
         engine          = browser.getEngine();
-        urlField        = new TextField("http://www.google.com");
+        urlField        = new TextField("https://news.ycombinator.com");
         backButton      = new Button("Back");
         forwardButton   = new Button("Forward");
         favoritesButton = new Button("Favorites");
