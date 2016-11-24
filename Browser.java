@@ -44,7 +44,7 @@ public class Browser extends Application
         stage.setTitle("Browser"); //window name
         browser         = new WebView();
         engine          = browser.getEngine();
-        urlField        = new TextField("http://www.google.com");
+        urlField        = new TextField("https://news.ycombinator.com");
         backButton      = new Button("Back");
         forwardButton   = new Button("Forward");
         favoritesButton = new Button("Favorites");
@@ -141,61 +141,81 @@ public class Browser extends Application
     {
         try // load document and display location
             {
-                if (location.charAt(0) == '/' && lastLocation != null) {
+                System.out.println("Location: "+location);
+                if (!location.substring(0, 4).equals("http") && lastLocation != null) {
                     // catch relative links
-                    location = lastLocation + location;
+                    if (location.charAt(0) != '/') {
+                        /*
+                        If the relative link doesn't start with a /, we need to find the root of the site.
+                        This requires some string manipulation of the lastLocation to find the root.
+                        I wrote this a bit hungover. Sorry it's confusing.
+                        */
+
+                        int i = lastLocation.length() - 2;
+                        // start one character from the end (before the potential trailing /)
+
+                        while (lastLocation.charAt(i--) != '/' && i > 0) {}
+                        // find the last instance of /
+
+                        if (i > 6) {
+                            // if the result isn't just "http:// or similar, alter lastLocation appropriately
+                            lastLocation = lastLocation.substring(0, i+1);
+                        }
+                    }
+                    location = lastLocation + "/" + location;
+                    // back up and running
                 }
                 url = new URL(location);
-                lastLocation = location; // store the last url for relative links
 
-                System.out.println("getting url...");
+                System.out.println("getting url " + location);
                 htmlText = service.getHTML(url);
                 System.out.println("got url...");
 
                 if (htmlText.equals("Page request error")) {
-                    System.err.println("Error: Can't get page");
-                    engine.loadContent(errorPage);
-                }
-                else {
-                    System.out.println("loading content...");
-                    engine.loadContent(htmlText);
-                    System.out.println("content loaded...");
-                }
+                        System.err.println("Error: Can't get page - " + location);
+                        engine.loadContent(errorPage);
+                    }
+                    else {
+                        System.out.println("loading content...");
+                        engine.loadContent(htmlText);
+                        System.out.println("content loaded...");
+                    }
 
-                System.out.println();
-                urlField.setText(location);
+                    System.out.println();
+                    urlField.setText(location);
+                    lastLocation = location; // store the last url for relative links
 
-                // addToHistory(location);
+                    // TODO addToHistory(location);
 
-            } // end try
+                } // end try
 
-        catch ( MalformedURLException URLException )
-            {
-                System.err.println("Error: Malformed URL");
-                URLException.printStackTrace();
-                engine.loadContent(errorPage);
+                catch ( MalformedURLException URLException )
+                    {
+                        System.err.println("Error: Malformed URL - " + location);
+                        URLException.printStackTrace();
+                        engine.loadContent(errorPage);
+                    }
+                catch ( Exception e)
+                    {
+                        System.err.println("Error: Can't get page - " + location);
+                        e.printStackTrace();
+                        engine.loadContent(errorPage);
+                    } // end catch
+
+            } // end method getPage
+
+        public static void main(String[] args) {
+
+            try{
+                // service = (Server) Naming.lookup
+                //     ("rmi://" + args[0] + "/Server");
+                service = (ServerInterface) Naming.lookup ("rmi://localhost/Server");
             }
-        catch ( Exception e)
-            {
-                System.err.println("Error: Can't get page");
+            catch(Exception e){
+                System.out.println("Failed setting up registry lookup");
                 e.printStackTrace();
-                engine.loadContent(errorPage);
-            } // end catch
-
-    } // end method getPage
-
-    public static void main(String[] args) {
-
-        try{
-            // service = (Server) Naming.lookup
-            //     ("rmi://" + args[0] + "/Server");
-            service = (ServerInterface) Naming.lookup ("rmi://localhost/Server");
+                System.exit(1);
+            }
+            launch(args);
         }
-        catch(Exception e){
-            System.out.println("Failed setting up registry lookup");
-            e.printStackTrace();
-            System.exit(1);
-        }
-        launch(args);
     }
-}
