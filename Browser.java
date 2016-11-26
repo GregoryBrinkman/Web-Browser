@@ -27,17 +27,17 @@ public class Browser extends Application
     public  static ServerInterface service;
     private static String          lastLocation;
 
-    private WebEngine engine;
-    private WebView   browser;
-    private TextField urlField;
-    public  URL       url;
-    public  String    htmlText;
-    private String    errorPage;
-    private Button    forwardButton;
-    private Button    backButton;
-    private Button    favoritesButton;
-    private Button    historyButton;
-    private StringBuffer fileData;
+    private WebEngine      engine;
+    private WebView        browser;
+    private TextField      urlField;
+    public  URL            url;
+    public  String         htmlText;
+    private String         errorPage;
+    private Button         forwardButton;
+    private Button         backButton;
+    private Button         favoritesButton;
+    private Button         historyButton;
+    private StringBuffer   fileData;
     private BufferedReader reader;
 
     public void start(Stage stage) {
