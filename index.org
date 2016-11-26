@@ -1,0 +1,11 @@
+#+OPTIONS: num:nil reveal_title_slide:nil TOC:nil ^:nil 
+#+REVEAL_THEME:blood
+#+REVEAL_TRANS:linear
+
+* VPN-Enabled Web Browser
+A web browser that runs all requests through an external server
+
+--------------------------------
+  Sam Messina
+
+  Greg Brinkman
