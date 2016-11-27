@@ -28,8 +28,8 @@
 <div class="slides">
 
 <section>
-<section id="slide-org270fe19">
-<h2 id="org270fe19">VPN-Enabled Web Browser</h2>
+<section id="slide-orgc271941">
+<h2 id="orgc271941">VPN-Enabled Web Browser</h2>
 <p>
 A web browser that runs all requests through an external server
 </p>
@@ -42,6 +42,86 @@ Sam Messina
 <p>
 Greg Brinkman
 </p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc7c4f41">
+<h2 id="orgc7c4f41">Basic Idea</h2>
+<ul>
+<li>Basic structure is an RMI client-server relationship</li>
+<li>A Java-based web browser would act as our client</li>
+<li>Our server would retrieve HTML from a website and send it back to the client</li>
+<li>Server and client are tied together via RMI
+<ul>
+<li>The "Remote Method" in this case gets the HTML for a given URL and returns it in a string</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org163d46d">
+<h2 id="org163d46d">Iterations Of Our Project</h2>
+<div class="outline-text-2" id="text-org163d46d">
+</div></section>
+<section id="slide-orgc5b75be">
+<h3 id="orgc5b75be">Blissful Ignorance</h3>
+<ul>
+<li>We stated out with the in-class web browser lab</li>
+<li>We were able to get a working prototype</li>
+<li>Swing-based JEditorPane cannot display HTML versions greater than 3.2
+<ul>
+<li>Pro: it loaded the old Space Jam site just fine</li>
+<li>Con: it loaded essentially nothing else</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-org4a772ff">
+<h3 id="org4a772ff">Enter JavaFX: The Rich Client Platform</h3>
+<ul>
+<li>JavaFX has a number of advanced UI-based classes</li>
+<li>We used JavaFX's Stage, WebView, and WebEngine to render our browser</li>
+
+</ul>
+
+</section>
+<section id="slide-org8605475">
+<h3 id="org8605475">O HyperLinkListener, HyperLinkListener! Wherefore art thou HyperLinkListener?</h3>
+<ul>
+<li>While JEditorPane allows you to implement your own HyperLinkListener, WebEngine does not
+<ul>
+<li>This is a problem because clicking a link didn't send the request through our server</li>
+
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-org07cb157">
+<h3 id="org07cb157">Solution? Add a click listener.</h3>
+<ul>
+<li>Whenever a user clicks, the browser checks the clicked tag for an "href" attribute.</li>
+<li>If found, the browser navigates to the URL found in the href attribute, sending its request through our server</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org6f26b62">
+<h2 id="org6f26b62">As It Stands</h2>
+<ul>
+<li>Our Browser now sends all links and URLs through an external server using RMI.</li>
+<li>While static pages can be retrieved from HTML without hiccup</li>
+<li>Some images, javascript, css, etc get lost in the transfer</li>
+
+</ul>
 </section>
 </section>
 </div>
