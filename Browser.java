@@ -172,50 +172,50 @@ public class Browser extends Application
                 System.out.println("got url...");
 
                 if (htmlText.equals("Page request error")) {
-                        System.err.println("Error: Can't get page - " + location);
-                        engine.loadContent(errorPage);
-                    }
-                    else {
-                        System.out.println("loading content...");
-                        engine.loadContent(htmlText);
-                        System.out.println("content loaded...");
-                    }
+                    System.err.println("Error: Can't get page - " + location);
+                    engine.loadContent(errorPage);
+                }
+                else {
+                    System.out.println("loading content...");
+                    engine.loadContent(htmlText);
+                    System.out.println("content loaded...");
+                }
 
-                    System.out.println();
-                    urlField.setText(location);
-                    lastLocation = location; // store the last url for relative links
+                System.out.println();
+                urlField.setText(location);
+                lastLocation = location; // store the last url for relative links
 
-                    // TODO addToHistory(location);
+                // TODO addToHistory(location);
 
-                } // end try
+            } // end try
 
-                catch ( MalformedURLException URLException )
-                    {
-                        System.err.println("Error: Malformed URL - " + location);
-                        URLException.printStackTrace();
-                        engine.loadContent(errorPage);
-                    }
-                catch ( Exception e)
-                    {
-                        System.err.println("Error: Can't get page - " + location);
-                        e.printStackTrace();
-                        engine.loadContent(errorPage);
-                    } // end catch
-
-            } // end method getPage
-
-        public static void main(String[] args) {
-
-            try{
-                // service = (Server) Naming.lookup
-                //     ("rmi://" + args[0] + "/Server");
-                service = (ServerInterface) Naming.lookup ("rmi://localhost/Server");
+        catch ( MalformedURLException URLException )
+            {
+                System.err.println("Error: Malformed URL - " + location);
+                URLException.printStackTrace();
+                engine.loadContent(errorPage);
             }
-            catch(Exception e){
-                System.out.println("Failed setting up registry lookup");
+        catch ( Exception e)
+            {
+                System.err.println("Error: Can't get page - " + location);
                 e.printStackTrace();
-                System.exit(1);
-            }
-            launch(args);
+                engine.loadContent(errorPage);
+            } // end catch
+
+    } // end method getPage
+
+    public static void main(String[] args) {
+
+        try{
+            // service = (Server) Naming.lookup
+            //     ("rmi://" + args[0] + "/Server");
+            service = (ServerInterface) Naming.lookup ("rmi://localhost/Server");
         }
+        catch(Exception e){
+            System.out.println("Failed setting up registry lookup");
+            e.printStackTrace();
+            System.exit(1);
+        }
+        launch(args);
     }
+}
