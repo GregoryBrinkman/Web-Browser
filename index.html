@@ -28,8 +28,8 @@
 <div class="slides">
 
 <section>
-<section id="slide-orgc271941">
-<h2 id="orgc271941">VPN-Enabled Web Browser</h2>
+<section id="slide-orgheadline1">
+<h2 id="orgheadline1">VPN-Enabled Web Browser</h2>
 <p>
 A web browser that runs all requests through an external server
 </p>
@@ -46,8 +46,8 @@ Greg Brinkman
 </section>
 </section>
 <section>
-<section id="slide-orgc7c4f41">
-<h2 id="orgc7c4f41">Basic Idea</h2>
+<section id="slide-orgheadline2">
+<h2 id="orgheadline2">Basic Idea</h2>
 <ul>
 <li>Basic structure is an RMI client-server relationship</li>
 <li>A Java-based web browser would act as our client</li>
@@ -63,12 +63,12 @@ Greg Brinkman
 </section>
 </section>
 <section>
-<section id="slide-org163d46d">
-<h2 id="org163d46d">Iterations Of Our Project</h2>
-<div class="outline-text-2" id="text-org163d46d">
+<section id="slide-orgheadline7">
+<h2 id="orgheadline7">Iterations Of Our Project</h2>
+<div class="outline-text-2" id="text-orgheadline7">
 </div></section>
-<section id="slide-orgc5b75be">
-<h3 id="orgc5b75be">Blissful Ignorance</h3>
+<section id="slide-orgheadline3">
+<h3 id="orgheadline3">Blissful Ignorance</h3>
 <ul>
 <li>We stated out with the in-class web browser lab</li>
 <li>We were able to get a working prototype</li>
@@ -82,8 +82,8 @@ Greg Brinkman
 </ul>
 
 </section>
-<section id="slide-org4a772ff">
-<h3 id="org4a772ff">Enter JavaFX: The Rich Client Platform</h3>
+<section id="slide-orgheadline4">
+<h3 id="orgheadline4">Enter JavaFX: The Rich Client Platform</h3>
 <ul>
 <li>JavaFX has a number of advanced UI-based classes</li>
 <li>We used JavaFX's Stage, WebView, and WebEngine to render our browser</li>
@@ -91,8 +91,8 @@ Greg Brinkman
 </ul>
 
 </section>
-<section id="slide-org8605475">
-<h3 id="org8605475">O HyperLinkListener, HyperLinkListener! Wherefore art thou HyperLinkListener?</h3>
+<section id="slide-orgheadline5">
+<h3 id="orgheadline5">O HyperLinkListener, HyperLinkListener! Wherefore art thou HyperLinkListener?</h3>
 <ul>
 <li>While JEditorPane allows you to implement your own HyperLinkListener, WebEngine does not
 <ul>
@@ -103,8 +103,8 @@ Greg Brinkman
 </ul>
 
 </section>
-<section id="slide-org07cb157">
-<h3 id="org07cb157">Solution? Add a click listener.</h3>
+<section id="slide-orgheadline6">
+<h3 id="orgheadline6">Solution? Add a click listener.</h3>
 <ul>
 <li>Whenever a user clicks, the browser checks the clicked tag for an "href" attribute.</li>
 <li>If found, the browser navigates to the URL found in the href attribute, sending its request through our server</li>
@@ -114,12 +114,49 @@ Greg Brinkman
 </section>
 </section>
 <section>
-<section id="slide-org6f26b62">
-<h2 id="org6f26b62">As It Stands</h2>
+<section id="slide-orgheadline8">
+<h2 id="orgheadline8">As It Stands</h2>
 <ul>
 <li>Our Browser now sends all links and URLs through an external server using RMI.</li>
 <li>While static pages can be retrieved from HTML without hiccup</li>
 <li>Some images, javascript, css, etc get lost in the transfer</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgheadline11">
+<h2 id="orgheadline11">How To Run</h2>
+<div class="outline-text-2" id="text-orgheadline11">
+</div></section>
+<section id="slide-orgheadline9">
+<h3 id="orgheadline9">Packages</h3>
+<ul>
+<li>You will need the following packages:
+<ul>
+<li>JavaFX</li>
+<li>Java 7 JDK/JRE</li>
+<li>rmiregistry</li>
+
+</ul></li>
+
+</ul>
+</section>
+<section id="slide-orgheadline10">
+<h3 id="orgheadline10">Commands</h3>
+<ul>
+<li>Run the following commands from the root of the project:</li>
+
+</ul>
+<pre class="example">
+$ javac *.java
+$ rmiregistry &amp;
+$ java Server &amp;
+$ Java Browser
+</pre>
+<ul>
+<li>The browser will pop up, and all requests will be displayed in the terminal</li>
 
 </ul>
 </section>
