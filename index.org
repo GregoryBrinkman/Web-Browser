@@ -51,3 +51,18 @@
   - While static pages can be retrieved from HTML without hiccup
   - Some images, javascript, css, etc get lost in the transfer
 
+* How To Run
+** Packages
+- You will need the following packages:
+  - JavaFX
+  - Java 7 JDK/JRE
+  - rmiregistry
+** Commands
+- Run the following commands from the root of the project:
+#+BEGIN_EXAMPLE
+$ javac *.java
+$ rmiregistry &
+$ java Server &
+$ Java Browser
+#+END_EXAMPLE
+- The browser will pop up, and all requests will be displayed in the terminal
