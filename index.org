@@ -37,6 +37,14 @@
 ** Solution? Add a click listener.
    - Whenever a user clicks, the browser checks the clicked tag for an "href" attribute.
    - If found, the browser navigates to the URL found in the href attribute, sending its request through our server
+   
+
+** History Repeats it self
+
+** Buttons!
+
+** 
+
 
 * As It Stands
   - Our Browser now sends all links and URLs through an external server using RMI.
