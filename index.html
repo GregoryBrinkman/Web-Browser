@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <title></title>
-<meta name="author" content="(zookeeprr)"/>
+<meta name="author" content="(Greg)"/>
 <style type="text/css">
 .underline { text-decoration: underline; }
 </style>
@@ -28,8 +28,8 @@
 <div class="slides">
 
 <section>
-<section id="slide-orgc271941">
-<h2 id="orgc271941">VPN-Enabled Web Browser</h2>
+<section id="slide-org25913db">
+<h2 id="org25913db">VPN-Enabled Web Browser</h2>
 <p>
 A web browser that runs all requests through an external server
 </p>
@@ -46,8 +46,8 @@ Greg Brinkman
 </section>
 </section>
 <section>
-<section id="slide-orgc7c4f41">
-<h2 id="orgc7c4f41">Basic Idea</h2>
+<section id="slide-orgf18445b">
+<h2 id="orgf18445b">Basic Idea</h2>
 <ul>
 <li>Basic structure is an RMI client-server relationship</li>
 <li>A Java-based web browser would act as our client</li>
@@ -63,12 +63,12 @@ Greg Brinkman
 </section>
 </section>
 <section>
-<section id="slide-org163d46d">
-<h2 id="org163d46d">Iterations Of Our Project</h2>
-<div class="outline-text-2" id="text-org163d46d">
+<section id="slide-org0886201">
+<h2 id="org0886201">Iterations Of Our Project</h2>
+<div class="outline-text-2" id="text-org0886201">
 </div></section>
-<section id="slide-orgc5b75be">
-<h3 id="orgc5b75be">Blissful Ignorance</h3>
+<section id="slide-orge4a15d9">
+<h3 id="orge4a15d9">Blissful Ignorance</h3>
 <ul>
 <li>We stated out with the in-class web browser lab</li>
 <li>We were able to get a working prototype</li>
@@ -82,8 +82,8 @@ Greg Brinkman
 </ul>
 
 </section>
-<section id="slide-org4a772ff">
-<h3 id="org4a772ff">Enter JavaFX: The Rich Client Platform</h3>
+<section id="slide-orga3f1387">
+<h3 id="orga3f1387">Enter JavaFX: The Rich Client Platform</h3>
 <ul>
 <li>JavaFX has a number of advanced UI-based classes</li>
 <li>We used JavaFX's Stage, WebView, and WebEngine to render our browser</li>
@@ -91,8 +91,8 @@ Greg Brinkman
 </ul>
 
 </section>
-<section id="slide-org8605475">
-<h3 id="org8605475">O HyperLinkListener, HyperLinkListener! Wherefore art thou HyperLinkListener?</h3>
+<section id="slide-orge91efbf">
+<h3 id="orge91efbf">O HyperLinkListener, HyperLinkListener! Wherefore art thou HyperLinkListener?</h3>
 <ul>
 <li>While JEditorPane allows you to implement your own HyperLinkListener, WebEngine does not
 <ul>
@@ -103,8 +103,8 @@ Greg Brinkman
 </ul>
 
 </section>
-<section id="slide-org07cb157">
-<h3 id="org07cb157">Solution? Add a click listener.</h3>
+<section id="slide-org9478bd4">
+<h3 id="org9478bd4">Solution? Add a click listener.</h3>
 <ul>
 <li>Whenever a user clicks, the browser checks the clicked tag for an "href" attribute.</li>
 <li>If found, the browser navigates to the URL found in the href attribute, sending its request through our server</li>
@@ -112,10 +112,23 @@ Greg Brinkman
 </ul>
 
 </section>
+<section id="slide-orgd6d180a">
+<h3 id="orgd6d180a">Buttons!</h3>
+
+</section>
+<section id="slide-org4e32788">
+<h3 id="org4e32788">History Repeats it self</h3>
+
+</section>
+<section id="slide-org516d25a">
+<h3 id="org516d25a"></h3>
+
+
+</section>
 </section>
 <section>
-<section id="slide-org6f26b62">
-<h2 id="org6f26b62">As It Stands</h2>
+<section id="slide-org4766078">
+<h2 id="org4766078">As It Stands</h2>
 <ul>
 <li>Our Browser now sends all links and URLs through an external server using RMI.</li>
 <li>While static pages can be retrieved from HTML without hiccup</li>
