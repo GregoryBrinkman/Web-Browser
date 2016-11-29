@@ -1,4 +1,5 @@
 #+OPTIONS: num:nil reveal_title_slide:nil TOC:nil ^:nil 
+#+TITLE: 412 Project
 #+REVEAL_THEME:blood
 #+REVEAL_TRANS:linear
 
