@@ -148,7 +148,6 @@ public class Browser extends Application
                         /*
                         If the relative link doesn't start with a /, we need to find the root of the site.
                         This requires some string manipulation of the lastLocation to find the root.
-                        I wrote this a bit hungover. Sorry it's confusing.
                         */
 
                         int i = lastLocation.length() - 2;
