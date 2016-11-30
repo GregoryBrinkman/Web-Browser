@@ -39,12 +39,11 @@ public class Browser extends Application
     private Button           historyButton;
     private StringBuffer     fileData;
     private BufferedReader   reader;
-    private FileOutputStream logFile;
-    private PrintWriter      logWriter;
-    private BufferedReader   logReader;
     private Stack            backStack;
     private Stack            forwardStack;
-    // private boolean          backed;
+    private FileOutputStream logFileOut;
+    private PrintWriter      logWriter;
+    private BufferedReader   logReader;
 
     // logWriter.println("There is a tie here") ;
     // logWriter.close();
@@ -62,16 +61,15 @@ public class Browser extends Application
         fileData        = new StringBuffer();
         backStack       = new Stack();
         forwardStack    = new Stack();
-        // backed          = false;
 
         // load history
         // load error page html into string
         try
             {
-                // logFileOut      = new FileOutputStream(".history", true);
+                logFileOut      = new FileOutputStream(".history", true);
+                logWriter       = new PrintWriter(logFileOut, true);
                 // logFileIn       = new FileInputStream(".history", true);
                 // logReader       = new PrintWriter(logFile);
-                // logWriter       = new PrintWriter(logFile, true);
                 reader      = new BufferedReader(new FileReader("error.html"));
                 char[] buf  = new char[1024];
                 int numRead = 0;
@@ -240,6 +238,7 @@ public class Browser extends Application
                 lastLocation = location; // store the last url for relative links
 
                 // TODO addToHistory(location);
+                logWriter.println(location);
 
             } // end try
 
