@@ -92,14 +92,15 @@ public class Browser extends Application
                 public void handle(ActionEvent event) {
                     showPush(backStack, urlField.getText());
                     getPage(urlField.getText());
+                    forwardStack = new Stack();
                 }
             });
 
         backButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
                     if(!backStack.empty()){
-                        System.out.println("Popping backstack");
                         String lastPage = showPop(backStack);
+                        System.out.printf("Popping backstack: %s\n", lastPage);
                         System.out.print("Pushing forwardstack");
                         showPush(forwardStack, urlField.getText());
                         urlField.setText(lastPage);
@@ -117,8 +118,8 @@ public class Browser extends Application
                     System.out.println("Popping forwardstack");
                     if(!forwardStack.empty()){
                         page = showPop(forwardStack);
+                        showPush(backStack, urlField.getText());
                         urlField.setText(page);
-                        showPush(backStack, page);
                         getPage(page);
                     }
                     else{System.out.println("newvermind forwardstack is empty");}
@@ -153,6 +154,7 @@ public class Browser extends Application
                                             try {
                                                 showPush(backStack, urlField.getText());
                                                 getPage(href);
+                                                forwardStack = new Stack();
                                             }
                                             catch (Exception e) {
                                                 System.out.println("Hyperlink error: " + e);
@@ -186,6 +188,7 @@ public class Browser extends Application
         stage.show();
         showPush(backStack, urlField.getText());
         getPage(urlField.getText());
+        forwardStack = new Stack();
     } // end start()
 
     // load document
