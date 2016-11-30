@@ -44,6 +44,7 @@ public class Browser extends Application
     private FileOutputStream logFileOut;
     private PrintWriter      logWriter;
     private BufferedReader   logReader;
+    private String           currentUrl;
 
     // logWriter.println("There is a tie here") ;
     // logWriter.close();
@@ -61,6 +62,7 @@ public class Browser extends Application
         fileData        = new StringBuffer();
         backStack       = new Stack();
         forwardStack    = new Stack();
+        currentUrl      = "";
 
         // load history
         // load error page html into string
@@ -88,8 +90,9 @@ public class Browser extends Application
         //define url input handling
         urlField.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
-                    showPush(backStack, urlField.getText());
-                    getPage(urlField.getText());
+                    showPush(backStack, currentUrl);
+                    currentUrl = urlField.getText();
+                    getPage(currentUrl);
                     forwardStack = new Stack();
                 }
             });
@@ -100,8 +103,9 @@ public class Browser extends Application
                         String lastPage = showPop(backStack);
                         System.out.printf("Popping backstack: %s\n", lastPage);
                         System.out.print("Pushing forwardstack");
-                        showPush(forwardStack, urlField.getText());
+                        showPush(forwardStack, currentUrl);
                         urlField.setText(lastPage);
+                        currentUrl = lastPage;
                         getPage(lastPage);
                     }
                     else{
@@ -118,6 +122,7 @@ public class Browser extends Application
                         page = showPop(forwardStack);
                         showPush(backStack, urlField.getText());
                         urlField.setText(page);
+                        currentUrl = page;
                         getPage(page);
                     }
                     else{System.out.println("newvermind forwardstack is empty");}
@@ -152,6 +157,7 @@ public class Browser extends Application
                                             try {
                                                 showPush(backStack, urlField.getText());
                                                 getPage(href);
+                                                currentUrl = href;
                                                 forwardStack = new Stack();
                                             }
                                             catch (Exception e) {
@@ -184,8 +190,8 @@ public class Browser extends Application
         root.getChildren().setAll(toolbar, browser);
         stage.setScene(new Scene(root));
         stage.show();
-        showPush(backStack, urlField.getText());
         getPage(urlField.getText());
+        currentUrl = urlField.getText();
         forwardStack = new Stack();
     } // end start()
 
