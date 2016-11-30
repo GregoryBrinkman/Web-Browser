@@ -27,18 +27,27 @@ public class Browser extends Application
     public  static ServerInterface service;
     private static String          lastLocation;
 
-    private WebEngine      engine;
-    private WebView        browser;
-    private TextField      urlField;
-    public  URL            url;
-    public  String         htmlText;
-    private String         errorPage;
-    private Button         forwardButton;
-    private Button         backButton;
-    private Button         favoritesButton;
-    private Button         historyButton;
-    private StringBuffer   fileData;
-    private BufferedReader reader;
+    private WebEngine        engine;
+    private WebView          browser;
+    private TextField        urlField;
+    public  URL              url;
+    public  String           htmlText;
+    private String           errorPage;
+    private Button           forwardButton;
+    private Button           backButton;
+    private Button           favoritesButton;
+    private Button           historyButton;
+    private StringBuffer     fileData;
+    private BufferedReader   reader;
+    private FileOutputStream logFile;
+    private PrintWriter      logWriter;
+    private BufferedReader   logReader;
+    private Stack            backStack;
+    private Stack            forwardStack;
+    // private boolean          backed;
+
+    // logWriter.println("There is a tie here") ;
+    // logWriter.close();
 
     public void start(Stage stage) {
         stage.setTitle("Browser"); //window name
@@ -51,10 +60,18 @@ public class Browser extends Application
         historyButton   = new Button("History");
         errorPage       = "";
         fileData        = new StringBuffer();
+        backStack       = new Stack();
+        forwardStack    = new Stack();
+        // backed          = false;
 
+        // load history
         // load error page html into string
         try
             {
+                // logFileOut      = new FileOutputStream(".history", true);
+                // logFileIn       = new FileInputStream(".history", true);
+                // logReader       = new PrintWriter(logFile);
+                // logWriter       = new PrintWriter(logFile, true);
                 reader      = new BufferedReader(new FileReader("error.html"));
                 char[] buf  = new char[1024];
                 int numRead = 0;
@@ -73,9 +90,41 @@ public class Browser extends Application
         //define url input handling
         urlField.setOnAction(new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent event) {
+                    showPush(backStack, urlField.getText());
                     getPage(urlField.getText());
                 }
             });
+
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                    if(!backStack.empty()){
+                        System.out.println("Popping backstack");
+                        String lastPage = showPop(backStack);
+                        System.out.print("Pushing forwardstack");
+                        showPush(forwardStack, urlField.getText());
+                        urlField.setText(lastPage);
+                        getPage(lastPage);
+                    }
+                    else{
+                        System.out.println("ELSE. nevermind about backstack");
+                    }
+                }
+            });
+
+        forwardButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                    String page;
+                    System.out.println("Popping forwardstack");
+                    if(!forwardStack.empty()){
+                        page = showPop(forwardStack);
+                        urlField.setText(page);
+                        showPush(backStack, page);
+                        getPage(page);
+                    }
+                    else{System.out.println("newvermind forwardstack is empty");}
+                }
+            });
+
 
         engine.getLoadWorker()
             .exceptionProperty()
@@ -102,6 +151,7 @@ public class Browser extends Application
                                         if (href == null) { return; }
                                         else {
                                             try {
+                                                showPush(backStack, urlField.getText());
                                                 getPage(href);
                                             }
                                             catch (Exception e) {
@@ -134,6 +184,8 @@ public class Browser extends Application
         root.getChildren().setAll(toolbar, browser);
         stage.setScene(new Scene(root));
         stage.show();
+        showPush(backStack, urlField.getText());
+        getPage(urlField.getText());
     } // end start()
 
     // load document
@@ -203,6 +255,20 @@ public class Browser extends Application
 
     } // end method getPage
 
+    static String showPush(Stack st, String a) {
+        st.push(new String(a));
+        System.out.println("push(" + a + ")");
+        System.out.println("stack: " + st);
+        return a;
+    }
+
+    static String showPop(Stack st) {
+        System.out.print("pop -> ");
+        String a = (String) st.pop();
+        System.out.println(a);
+        System.out.println("stack: " + st);
+        return a;
+   }
     public static void main(String[] args) {
 
         try{
