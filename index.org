@@ -57,11 +57,15 @@
   - Java 7 JDK/JRE
   - rmiregistry
 ** Commands
-- Run the following commands from the root of the project:
-#+BEGIN_EXAMPLE
-$ javac *.java
-$ rmiregistry &
-$ java Server &
-$ Java Browser [SERVER IP ADDRESS]
-#+END_EXAMPLE
-- The browser will pop up, and all requests will be displayed in the host terminal
+   Run the following commands from the root of the project:
+   - Server: 
+   #+BEGIN_EXAMPLE
+   $ javac *.java
+   $ rmiregistry &
+   $ java Server &
+   #+END_EXAMPLE
+   - Client: 
+   #+BEGIN_EXAMPLE
+   $ Java Browser [SERVER IP ADDRESS]
+   #+END_EXAMPLE
+   - The browser will pop up, and all requests will be displayed in the host terminal
