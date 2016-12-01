@@ -6,6 +6,8 @@
 * VPN-Enabled Web Browser
   A web browser that runs all requests through an external server
 
+  github.com/regexpressyourself/Web-Browser
+
   --------------------------------
   Sam Messina
 
