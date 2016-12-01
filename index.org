@@ -40,9 +40,14 @@
    - Whenever a user clicks, the browser checks the clicked tag for an "href" attribute.
    - If found, the browser navigates to the URL found in the href attribute, sending its request through our server
    
-** Moving Forward by Going Back, OR Stack to the Future!
-   - As we move to a new link, push the old url to a stack. When you click back, pop off that stack and go to url returned from the stack
-   - ForwardStack acts as a mirror to the backStack, meaning as you pop a url off the backStack, push that same url to the forwardStack and ViceVersa.
+** Stack to the Future!
+   - We use a stack for the back button
+   - As we move to a new link, push the old url to a stack. 
+   - When you click back, pop off that stack and go to url returned from the stack
+
+** Moving Forward by Going Backward
+   - ForwardStack acts as a mirror to the backStack
+   - As you pop a url off the backStack, push that same url to the forwardStack and ViceVersa.
 
 * As It Stands
   - Our Browser now sends all links and URLs through an external server using RMI.
@@ -61,6 +66,7 @@
 $ javac *.java
 $ rmiregistry &
 $ java Server &
-$ Java Browser [SERVER IP ADDRESS]
+$ Java Browser IPADDRESS
 #+END_EXAMPLE
 - The browser will pop up, and all requests will be displayed in the host terminal
+  
