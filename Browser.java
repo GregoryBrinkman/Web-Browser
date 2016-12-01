@@ -6,9 +6,11 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.beans.value.*;
 import javafx.event.*;
+import javafx.collections.*;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.web.*;
@@ -35,7 +37,7 @@ public class Browser extends Application
     private String           errorPage;
     private Button           forwardButton;
     private Button           backButton;
-    private Button           favoritesButton;
+    // private ComboBox         favorites;
     private Button           historyButton;
     private StringBuffer     fileData;
     private BufferedReader   reader;
@@ -56,7 +58,7 @@ public class Browser extends Application
         urlField        = new TextField("https://news.ycombinator.com");
         backButton      = new Button("Back");
         forwardButton   = new Button("Forward");
-        favoritesButton = new Button("Favorites");
+        // favorites = new Button("Favorites");
         historyButton   = new Button("History");
         errorPage       = "";
         fileData        = new StringBuffer();
@@ -96,6 +98,37 @@ public class Browser extends Application
                     forwardStack = new Stack();
                 }
             });
+
+        historyButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+
+                    try{
+                        List<String> fileContents = new ArrayList<String>();
+                        FileInputStream fileInputStream = new FileInputStream(".history");
+                        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+                        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                        String strLine = null;
+                        while((strLine=bufferedReader.readLine())!=null) {
+                            fileContents.add(strLine);
+                        }
+                        fileInputStream.close();
+
+                        for(int i=(fileContents.size()-1);i>=0;i--)
+                            System.out.println(fileContents.get(i));
+                    }catch(Exception ex){ex.printStackTrace();}
+
+                }
+            });
+
+        // favorites.setPromptText("Favorites");
+        // favorites.setOnAction(new EventHandler<ActionEvent>() {
+        //         @Override public void handle(ActionEvent e) {
+        //             String url = (String) favorites.getSelectionModel().getSelectedItem();
+        //             System.out.printf("favorites event: %s\n", url);
+        //             // getPage(url);
+        //         }
+        //     });
+
 
         backButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
@@ -177,13 +210,17 @@ public class Browser extends Application
                 } // end changed()
             }); // end addListener()
 
+
+        // ObservableList<String> options = comboFill(".favorites");
+        // favorites = new ComboBox(options);
         //set Toolbar
         HBox toolbar = new HBox();
         toolbar.getChildren().setAll(backButton,
                                      forwardButton,
                                      urlField,
-                                     favoritesButton,
-                                     historyButton);
+                                     // favorites,
+                                     historyButton
+                                     );
 
         //set Window
         VBox root = new VBox();
@@ -194,6 +231,52 @@ public class Browser extends Application
         currentUrl = urlField.getText();
         forwardStack = new Stack();
     } // end start()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            private static ObservableList<String> comboFill(String file) {
+                try {
+                    FileInputStream fileInputStream = new FileInputStream("file");
+                    ObjectInputStream ois = new ObjectInputStream(fileInputStream);
+                    List<String> list = (List<String>) ois.readObject() ;
+
+                    return FXCollections.observableList(list);
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return FXCollections.emptyObservableList();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // load document
     protected void getPage( String location )
