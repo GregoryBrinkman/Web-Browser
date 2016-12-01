@@ -71,6 +71,7 @@
    - Client: 
    #+BEGIN_EXAMPLE
    $ javac *.java
+   $ rmiregistry &
    $ Java Browser SERVER_IP_ADDRESS
    #+END_EXAMPLE
    - The browser will pop up, and all requests will be displayed in the host terminal
