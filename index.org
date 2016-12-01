@@ -41,9 +41,8 @@
    - If found, the browser navigates to the URL found in the href attribute, sending its request through our server
    
 ** Moving Forward by Going Back, OR Stack to the Future!
-   - Now That we have all our links, keeping track of them is getting hard. 
-   - Solution: As we move to a new link, push that to the stack. When you click back, pop off the stack, go to this url, and send this url to the forward stack.
-   - ForwardStack acts as a mirror to the backStack, meaning as you pop off the backStack, push to the forwardStack and ViceVersa.
+   - As we move to a new link, push the old url to a stack. When you click back, pop off that stack and go to url returned from the stack
+   - ForwardStack acts as a mirror to the backStack, meaning as you pop a url off the backStack, push that same url to the forwardStack and ViceVersa.
 
 * As It Stands
   - Our Browser now sends all links and URLs through an external server using RMI.

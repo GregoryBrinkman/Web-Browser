@@ -28,8 +28,8 @@
 <div class="slides">
 
 <section>
-<section id="slide-org7b55866">
-<h2 id="org7b55866">VPN-Enabled Web Browser</h2>
+<section id="slide-org2849637">
+<h2 id="org2849637">VPN-Enabled Web Browser</h2>
 <p>
 A web browser that runs all requests through an external server
 </p>
@@ -46,8 +46,8 @@ Greg Brinkman
 </section>
 </section>
 <section>
-<section id="slide-org8aa9117">
-<h2 id="org8aa9117">Basic Idea</h2>
+<section id="slide-orgb2580ab">
+<h2 id="orgb2580ab">Basic Idea</h2>
 <ul>
 <li>Basic structure is an RMI client-server relationship</li>
 <li>A Java-based web browser would act as our client</li>
@@ -63,12 +63,12 @@ Greg Brinkman
 </section>
 </section>
 <section>
-<section id="slide-org05ebd01">
-<h2 id="org05ebd01">Iterations Of Our Project</h2>
-<div class="outline-text-2" id="text-org05ebd01">
+<section id="slide-orge4b2e4f">
+<h2 id="orge4b2e4f">Iterations Of Our Project</h2>
+<div class="outline-text-2" id="text-orge4b2e4f">
 </div></section>
-<section id="slide-org16138bb">
-<h3 id="org16138bb">Blissful Ignorance</h3>
+<section id="slide-org5af7d18">
+<h3 id="org5af7d18">Blissful Ignorance</h3>
 <ul>
 <li>We stated out with the in-class web browser lab</li>
 <li>We were able to get a working prototype</li>
@@ -82,8 +82,8 @@ Greg Brinkman
 </ul>
 
 </section>
-<section id="slide-orgea9c2f4">
-<h3 id="orgea9c2f4">Enter JavaFX: The Rich Client Platform</h3>
+<section id="slide-orgcccb9fa">
+<h3 id="orgcccb9fa">Enter JavaFX: The Rich Client Platform</h3>
 <ul>
 <li>JavaFX has a number of advanced UI-based classes</li>
 <li>We used JavaFX's Stage, WebView, and WebEngine to render our browser</li>
@@ -91,8 +91,8 @@ Greg Brinkman
 </ul>
 
 </section>
-<section id="slide-orgd49de12">
-<h3 id="orgd49de12">O HyperLinkListener, HyperLinkListener! Wherefore art thou HyperLinkListener?</h3>
+<section id="slide-orgbbacf70">
+<h3 id="orgbbacf70">O HyperLinkListener, HyperLinkListener! Wherefore art thou HyperLinkListener?</h3>
 <ul>
 <li>While JEditorPane allows you to implement your own HyperLinkListener, WebEngine does not
 <ul>
@@ -103,8 +103,8 @@ Greg Brinkman
 </ul>
 
 </section>
-<section id="slide-org8870631">
-<h3 id="org8870631">Solution? Add a click listener.</h3>
+<section id="slide-org1d285ee">
+<h3 id="org1d285ee">Solution? Add a click listener.</h3>
 <ul>
 <li>Whenever a user clicks, the browser checks the clicked tag for an "href" attribute.</li>
 <li>If found, the browser navigates to the URL found in the href attribute, sending its request through our server</li>
@@ -112,20 +112,19 @@ Greg Brinkman
 </ul>
 
 </section>
-<section id="slide-org9730a40">
-<h3 id="org9730a40">Moving Forward by Going Back, OR Stack to the Future!</h3>
+<section id="slide-org899e631">
+<h3 id="org899e631">Moving Forward by Going Back, OR Stack to the Future!</h3>
 <ul>
-<li>Now That we have all our links, keeping track of them is getting hard.</li>
-<li>Solution: As we move to a new link, push that to the stack. When you click back, pop off the stack, go to this url, and send this url to the forward stack.</li>
-<li>ForwardStack acts as a mirror to the backStack, meaning as you pop off the backStack, push to the forwardStack and ViceVersa.</li>
+<li>As we move to a new link, push the old url to a stack. When you click back, pop off that stack and go to url returned from the stack</li>
+<li>ForwardStack acts as a mirror to the backStack, meaning as you pop a url off the backStack, push that same url to the forwardStack and ViceVersa.</li>
 
 </ul>
 
 </section>
 </section>
 <section>
-<section id="slide-org9a71d96">
-<h2 id="org9a71d96">As It Stands</h2>
+<section id="slide-org467e728">
+<h2 id="org467e728">As It Stands</h2>
 <ul>
 <li>Our Browser now sends all links and URLs through an external server using RMI.</li>
 <li>While static pages can be retrieved from HTML without hiccup</li>
@@ -136,12 +135,12 @@ Greg Brinkman
 </section>
 </section>
 <section>
-<section id="slide-orgb84305d">
-<h2 id="orgb84305d">How To Run</h2>
-<div class="outline-text-2" id="text-orgb84305d">
+<section id="slide-orgd3ea33f">
+<h2 id="orgd3ea33f">How To Run</h2>
+<div class="outline-text-2" id="text-orgd3ea33f">
 </div></section>
-<section id="slide-org30ec84a">
-<h3 id="org30ec84a">Packages</h3>
+<section id="slide-org825ab1f">
+<h3 id="org825ab1f">Packages</h3>
 <ul>
 <li>You will need the following packages:
 <ul>
@@ -153,8 +152,8 @@ Greg Brinkman
 
 </ul>
 </section>
-<section id="slide-orgd3b0e7a">
-<h3 id="orgd3b0e7a">Commands</h3>
+<section id="slide-orga05482e">
+<h3 id="orga05482e">Commands</h3>
 <ul>
 <li>Run the following commands from the root of the project:</li>
 
