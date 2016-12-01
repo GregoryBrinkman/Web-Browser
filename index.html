@@ -115,9 +115,18 @@ Greg Brinkman
 <section id="slide-org1b1bc3a">
 <h3 id="org1b1bc3a">Moving Forward by Going Back, OR Stack to the Future!</h3>
 <ul>
-<li>Now That we have all our links, keeping track of them is getting hard.</li>
-<li>Solution: As we move to a new link, push that to the stack. When you click back, pop off the stack, go to this url, and send this url to the forward stack.</li>
-<li>ForwardStack acts as a mirror to the backStack, meaning as you pop off the backStack, push to the forwardStack and ViceVersa.</li>
+<li>We use a stack for the back button</li>
+<li>As we move to a new link, push the old url to a stack.</li>
+<li>When you click back, pop off that stack and go to url returned from the stack</li>
+
+</ul>
+
+</section>
+<section id="slide-org798b3b8">
+<h3 id="org798b3b8">Moving Forward by Going Backward</h3>
+<ul>
+<li>ForwardStack acts as a mirror to the backStack</li>
+<li>As you pop a url off the backStack, push that same url to the forwardStack and ViceVersa.</li>
 
 </ul>
 
