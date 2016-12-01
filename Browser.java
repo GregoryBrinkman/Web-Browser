@@ -363,9 +363,9 @@ public class Browser extends Application
     public static void main(String[] args) {
 
         try{
-            // service = (Server) Naming.lookup
-            //     ("rmi://" + args[0] + "/Server");
-            service = (ServerInterface) Naming.lookup ("rmi://localhost/Server");
+            service = (ServerInterface) Naming.lookup
+                ("rmi://" + args[0] + "/Server");
+            // service = (ServerInterface) Naming.lookup ("rmi://localhost/Server");
         }
         catch(Exception e){
             System.out.println("Failed setting up registry lookup");
