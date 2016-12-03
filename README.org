@@ -1,18 +1,10 @@
 #+OPTIONS: num:nil reveal_title_slide:nil TOC:nil ^:nil 
-#+TITLE: 412 Project
+#+TITLE: VPN-Enabled Web Browser
 #+REVEAL_THEME:blood
 #+REVEAL_TRANS:linear
 
-* VPN-Enabled Web Browser
   A web browser that runs all requests through an external server
 
-  github.com/regexpressyourself/Web-Browser
-
-  --------------------------------
-  Sam Messina
-
-  Greg Brinkman
-  
 * Basic Idea
   - Basic structure is an RMI client-server relationship
   - A Java-based web browser would act as our client
